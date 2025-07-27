@@ -219,7 +219,6 @@ export const questions: Question[] = [
     type: 'multiple-choice',
     options: [
       'חשוב מאוד',
-      'לא קריטי',
       'אין לי העדפה'
     ],
     required: true

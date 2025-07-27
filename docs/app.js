@@ -111,24 +111,48 @@ class CarFinderWizard {
     }
 
     async loadQuestions() {
-        // Embedded questions for static version (GitHub Pages compatible)
-        this.questions = [
-            {
-                id: 'budget',
-                text: 'מה התקציב שלך לרכב (בש"ח)?',
-                type: 'multiple-choice',
-                options: [
-                    'עד 40,000 ₪',
-                    '40,000 - 70,000 ₪',
-                    '70,000 - 110,000 ₪',
-                    '110,000 - 160,000 ₪',
-                    '160,000 - 220,000 ₪',
-                    'מעל 220,000 ₪',
-                    'טווח מותאם אישית'
-                ],
-                required: true,
-                allowCustom: true
+        // Question groups for better organization
+        this.questionGroups = [
+            { 
+                id: 'usage_behavior', 
+                name: '🚗 שימוש והתנהגות נהיגה', 
+                description: 'נספר לנו על האופן שבו אתם משתמשים ברכב' 
             },
+            { 
+                id: 'family_space', 
+                name: '👨‍👩‍👧 צרכים משפחתיים ומרחב', 
+                description: 'מה החללים והתכונות הנדרשים עבורכם' 
+            },
+            { 
+                id: 'budget_financing', 
+                name: '💸 תקציב ומימון', 
+                description: 'בואו נגדיר את המסגרת הכלכלית' 
+            },
+            { 
+                id: 'car_preferences', 
+                name: '🚘 העדפות רכב', 
+                description: 'איזה סוג רכב מתאים לכם' 
+            },
+            { 
+                id: 'maintenance_reliability', 
+                name: '🔧 תחזוקה ואמינות', 
+                description: 'תכנון לטווח הארוך' 
+            },
+            { 
+                id: 'used_car', 
+                name: '🛻 רכב יד שנייה', 
+                description: 'אם אתם פתוחים לרכב משומש' 
+            },
+            { 
+                id: 'additional_info', 
+                name: '🧠 מידע נוסף', 
+                description: 'פרטים נוספים שיעזרו לנו' 
+            }
+        ];
+
+        // Embedded questions for static version (GitHub Pages compatible) - Reorganized by groups
+        this.questions = [
+            // Group 1: Usage and Driving Behavior (שימוש והתנהגות נהיגה)
             {
                 id: 'usage',
                 text: 'למה תשמש אותך המכונית?',
@@ -141,32 +165,8 @@ class CarFinderWizard {
                     'נהיגה ספורטיבית',
                     'שטח והרפתקאות'
                 ],
-                required: true
-            },
-            {
-                id: 'passengers',
-                text: 'כמה נוסעים בדרך כלל ברכב?',
-                type: 'multiple-choice',
-                options: [
-                    '1-2 אנשים',
-                    '3-4 אנשים',
-                    '5-6 אנשים',
-                    '7+ אנשים'
-                ],
-                required: true
-            },
-            {
-                id: 'fuel_preference',
-                text: 'מהי העדפת הדלק שלך?',
-                type: 'multiple-choice',
-                options: [
-                    'בנזין',
-                    'היברידי',
-                    'חשמלי',
-                    'דיזל',
-                    'אין העדפה'
-                ],
-                required: true
+                required: true,
+                group: 'usage_behavior'
             },
             {
                 id: 'driving_style',
@@ -178,32 +178,60 @@ class CarFinderWizard {
                     'ספורטיבי',
                     'נוחות ויוקרה'
                 ],
-                required: true
+                required: true,
+                group: 'usage_behavior'
             },
             {
-                id: 'parking',
-                text: 'מה מצב החניה שלך?',
+                id: 'intercity',
+                text: 'כמה פעמים בשבוע אתה נוסע מחוץ לעיר?',
                 type: 'multiple-choice',
                 options: [
-                    'חניה ברחוב',
-                    'חניה פרטית קטנה',
-                    'חניה פרטית גדולה',
-                    'חניה בבניין/חניון',
-                    'אין חניה קבועה'
+                    'כמעט אף פעם',
+                    '1-2 פעמים בשבוע',
+                    '3-4 פעמים בשבוע',
+                    'כל יום'
                 ],
-                required: true
+                required: true,
+                group: 'usage_behavior'
             },
             {
-                id: 'maintenance',
-                text: 'כמה חשוב לך שהרכב יהיה זול לאחזקה?',
+                id: 'mileage',
+                text: 'כמה קילומטרים אתה נוסע בממוצע ביום או בשבוע?',
                 type: 'multiple-choice',
                 options: [
-                    'חשוב מאוד',
-                    'די חשוב',
-                    'פחות חשוב',
-                    'לא חשוב בכלל'
+                    'פחות מ-20 ק"מ ליום',
+                    '20-50 ק"מ ליום',
+                    '50-100 ק"מ ליום',
+                    'יותר מ-100 ק"מ ליום'
                 ],
-                required: true
+                required: true,
+                group: 'usage_behavior'
+            },
+            // Group 2: Family Needs and Space (צרכים משפחתיים ומרחב)
+            {
+                id: 'passengers',
+                text: 'כמה נוסעים בדרך כלל ברכב?',
+                type: 'multiple-choice',
+                options: [
+                    '1-2 אנשים',
+                    '3-4 אנשים',
+                    '5-6 אנשים',
+                    '7+ אנשים'
+                ],
+                required: true,
+                group: 'family_space'
+            },
+            {
+                id: 'kids_seats',
+                text: 'האם אתה צריך מקום לכסאות בטיחות לילדים?',
+                type: 'multiple-choice',
+                options: [
+                    'לא',
+                    'כן, 1',
+                    'כן, לפחות 2'
+                ],
+                required: true,
+                group: 'family_space'
             },
             {
                 id: 'features',
@@ -219,42 +247,92 @@ class CarFinderWizard {
                     'גרירה',
                     'הנעה כפולה'
                 ],
-                required: true
+                required: true,
+                group: 'family_space'
             },
             {
-                id: 'mileage',
-                text: 'כמה קילומטרים אתה נוסע בממוצע ביום או בשבוע?',
+                id: 'parking',
+                text: 'מה מצב החניה שלך?',
                 type: 'multiple-choice',
                 options: [
-                    'פחות מ-20 ק"מ ליום',
-                    '20-50 ק"מ ליום',
-                    '50-100 ק"מ ליום',
-                    'יותר מ-100 ק"מ ליום'
+                    'חניה ברחוב',
+                    'חניה פרטית קטנה',
+                    'חניה פרטית גדולה',
+                    'חניה בבניין/חניון',
+                    'אין חניה קבועה'
                 ],
-                required: true
+                required: true,
+                group: 'family_space'
+            },
+            // Group 3: Budget and Financing (תקציב ומימון)
+            {
+                id: 'budget',
+                text: 'מה התקציב שלך לרכב (בש"ח)?',
+                type: 'multiple-choice',
+                options: [
+                    'עד 40,000 ₪',
+                    '40,000 - 70,000 ₪',
+                    '70,000 - 110,000 ₪',
+                    '110,000 - 160,000 ₪',
+                    '160,000 - 220,000 ₪',
+                    'מעל 220,000 ₪',
+                    'טווח מותאם אישית'
+                ],
+                required: true,
+                allowCustom: true,
+                group: 'budget_financing'
             },
             {
-                id: 'intercity',
-                text: 'כמה פעמים בשבוע אתה נוסע מחוץ לעיר?',
+                id: 'financing',
+                text: 'האם אתה מתכוון לרכוש את הרכב במימון?',
                 type: 'multiple-choice',
                 options: [
-                    'כמעט אף פעם',
-                    '1-2 פעמים בשבוע',
-                    '3-4 פעמים בשבוע',
-                    'כל יום'
+                    'כן, מימון מלא',
+                    'כן, מימון חלקי',
+                    'לא, תשלום מלא במזומן'
                 ],
-                required: true
+                required: true,
+                group: 'budget_financing'
+            },
+            // Group 4: Car Preferences (העדפות רכב)
+            {
+                id: 'fuel_preference',
+                text: 'מהי העדפת הדלק שלך?',
+                type: 'multiple-choice',
+                options: [
+                    'בנזין',
+                    'היברידי',
+                    'חשמלי',
+                    'דיזל',
+                    'אין העדפה'
+                ],
+                required: true,
+                group: 'car_preferences'
             },
             {
-                id: 'kids_seats',
-                text: 'האם אתה צריך מקום לכסאות בטיחות לילדים?',
+                id: 'popularity',
+                text: 'כמה חשוב לך שהרכב יהיה דגם נפוץ בארץ?',
                 type: 'multiple-choice',
                 options: [
-                    'לא',
-                    'כן, 1',
-                    'כן, לפחות 2'
+                    'חשוב מאוד',
+                    'אין לי העדפה'
                 ],
-                required: true
+                required: true,
+                group: 'car_preferences'
+            },
+            // Group 5: Maintenance and Reliability (תחזוקה ואמינות)
+            {
+                id: 'maintenance',
+                text: 'כמה חשוב לך שהרכב יהיה זול לאחזקה?',
+                type: 'multiple-choice',
+                options: [
+                    'חשוב מאוד',
+                    'די חשוב',
+                    'פחות חשוב',
+                    'לא חשוב בכלל'
+                ],
+                required: true,
+                group: 'maintenance_reliability'
             },
             {
                 id: 'ownership_duration',
@@ -265,8 +343,10 @@ class CarFinderWizard {
                     '3-5 שנים',
                     'יותר מ-5 שנים'
                 ],
-                required: true
+                required: true,
+                group: 'maintenance_reliability'
             },
+            // Group 6: Used Car (רכב יד שנייה)
             {
                 id: 'used_car',
                 text: 'האם אתה פתוח לרכב מיד שנייה?',
@@ -276,11 +356,12 @@ class CarFinderWizard {
                     'כן, אם זה משתלם',
                     'מעדיף רכב חדש בלבד'
                 ],
-                required: true
+                required: true,
+                group: 'used_car'
             },
             {
                 id: 'car_kilometers',
-                text: 'איזה טווח קילומטרים מקסימלי מקובל עליך ברכב משומש?',
+                text: 'איזה טווח קילומטרים מקובל עליך ברכב משומש?',
                 type: 'multiple-choice',
                 options: [
                     'עד 20,000 ק"מ',
@@ -296,7 +377,8 @@ class CarFinderWizard {
                     dependsOn: 'used_car',
                     showWhen: ['כן, עדיף']
                 },
-                allowCustom: true
+                allowCustom: true,
+                group: 'used_car'
             },
             {
                 id: 'previous_owners',
@@ -312,43 +394,69 @@ class CarFinderWizard {
                 conditional: {
                     dependsOn: 'used_car',
                     showWhen: ['כן, עדיף']
-                }
+                },
+                group: 'used_car'
             },
-            {
-                id: 'financing',
-                text: 'האם אתה מתכוון לרכוש את הרכב במימון?',
-                type: 'multiple-choice',
-                options: [
-                    'כן, מימון מלא',
-                    'כן, מימון חלקי',
-                    'לא, תשלום מלא במזומן'
-                ],
-                required: true
-            },
-            {
-                id: 'popularity',
-                text: 'כמה חשוב לך שהרכב יהיה דגם נפוץ בארץ?',
-                type: 'multiple-choice',
-                options: [
-                    'חשוב מאוד',
-                    'לא קריטי',
-                    'אין לי העדפה'
-                ],
-                required: true
-            },
+            // Group 7: Additional Information (מידע נוסף)
             {
                 id: 'brand_preference',
                 text: 'האם יש לך העדפה למותג מסוים?',
-                type: 'text',
-                required: false
+                type: 'autocomplete',
+                options: [
+                    'אאודי',
+                    'אופל', 
+                    'איסוזו',
+                    'אינפיניטי',
+                    'אקורה',
+                    'אלפא רומיאו',
+                    'BMW',
+                    'ג\'יפ',
+                    'דודג\'',
+                    'דייהטסו',
+                    'הונדה',
+                    'הונדאי',
+                    'וולוו',
+                    'טויוטה',
+                    'טסלה',
+                    'יגואר',
+                    'לנד רובר',
+                    'לנצ\'יה',
+                    'לקסוס',
+                    'מזדה',
+                    'מיני',
+                    'מיצובישי',
+                    'מרצדס בנץ',
+                    'ניסן',
+                    'סוזוקי',
+                    'סובארו',
+                    'סיאט',
+                    'סיטרואן',
+                    'סקודה',
+                    'פיאט',
+                    'פיג\'ו',
+                    'פולקסווגן',
+                    'פורד',
+                    'קיה',
+                    'קרייזלר',
+                    'רנו',
+                    'שברולט'
+                ],
+                required: false,
+                group: 'additional_info'
             },
             {
                 id: 'free_text',
                 text: 'יש עוד משהו שחשוב לך שנדע כדי למצוא את הרכב המתאים לך?',
                 type: 'text',
-                required: false
+                required: false,
+                group: 'additional_info'
             }
         ];
+    }
+
+    getCurrentGroup() {
+        const question = this.questions[this.currentStep];
+        return this.questionGroups.find(group => group.id === question.group);
     }
 
     renderWizard() {
@@ -363,7 +471,13 @@ class CarFinderWizard {
         }
 
         const question = this.questions[this.currentStep];
+        const currentGroup = this.getCurrentGroup();
         const progress = ((this.currentStep + 1) / this.questions.length) * 100;
+        
+        // Calculate group progress
+        const questionsInGroup = this.questions.filter(q => q.group === currentGroup.id);
+        const currentQuestionInGroup = questionsInGroup.findIndex(q => q.id === question.id) + 1;
+        const groupProgress = (currentQuestionInGroup / questionsInGroup.length) * 100;
 
         this.container.innerHTML = `
             <div class="progress-container">
@@ -372,14 +486,24 @@ class CarFinderWizard {
                 </div>
             </div>
             <div class="wizard-step active">
+                <div class="group-header">
+                    <h2 class="group-title">${currentGroup.name}</h2>
+                    <p class="group-description">${currentGroup.description}</p>
+                    <div class="group-progress">
+                        <div class="group-progress-bar">
+                            <div class="group-progress-fill" style="width: ${groupProgress}%"></div>
+                        </div>
+                        <span class="group-progress-text">שאלה ${currentQuestionInGroup} מתוך ${questionsInGroup.length} בקטגוריה</span>
+                    </div>
+                </div>
+                
                 <div class="step-header">
                     <div class="step-number">${this.currentStep + 1}</div>
-                    <h2 class="step-title">שאלה ${this.currentStep + 1} מתוך ${this.questions.length}</h2>
-                    <p class="step-description">בואו נמצא את הרכב המושלם עבורכם!</p>
+                    <h3 class="step-title">שאלה ${this.currentStep + 1} מתוך ${this.questions.length}</h3>
                 </div>
                 
                 <div class="question">
-                    <h3 class="question-text">${question.text}</h3>
+                    <h4 class="question-text">${question.text}</h4>
                     ${this.renderQuestionInput(question)}
                 </div>
                 
@@ -400,6 +524,11 @@ class CarFinderWizard {
         const currentQuestion = this.questions[this.currentStep];
         const nextBtn = document.getElementById('next-btn');
         if (!currentQuestion.required && nextBtn) {
+            nextBtn.disabled = false;
+        }
+        
+        // Special handling for brand preference to initialize properly
+        if (currentQuestion.type === 'autocomplete' && !currentQuestion.required) {
             nextBtn.disabled = false;
         }
     }
@@ -513,6 +642,31 @@ class CarFinderWizard {
                            min="${question.min || 0}" max="${question.max || 999999}"
                            ${question.required ? 'required' : ''}>
                 `;
+            case 'autocomplete':
+                return `
+                    <div class="brand-preference-container">
+                        <div class="brand-options-grid">
+                            <div class="brand-option custom-text-option" data-value="custom">
+                                <div class="brand-icon">✏️</div>
+                                <span class="brand-text">הקלד מותג אחר</span>
+                            </div>
+                            <div class="brand-option no-preference-option" data-value="">
+                                <div class="brand-icon">🤷‍♂️</div>
+                                <span class="brand-text">אין לי העדפה</span>
+                            </div>
+                            ${question.options.map(option => `
+                                <div class="brand-option" data-value="${option}">
+                                    <div class="brand-icon">${this.getBrandIcon(option)}</div>
+                                    <span class="brand-text">${option}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="custom-brand-input" style="display: none;">
+                            <input type="text" class="custom-brand-text" placeholder="הקלד את המותג המועדף עליך..." />
+                            <button type="button" class="btn-confirm-custom">✓ אישור</button>
+                        </div>
+                    </div>
+                `;
             default:
                 return '<p>Unsupported question type</p>';
         }
@@ -585,8 +739,265 @@ class CarFinderWizard {
                 // Only disable if required and input is empty
                 nextBtn.disabled = question.required && !input.value.trim();
             });
+        } else if (question.type === 'autocomplete') {
+            const brandOptions = document.querySelectorAll('.brand-option');
+            const customInput = document.querySelector('.custom-brand-input');
+            const customTextInput = document.querySelector('.custom-brand-text');
+            const confirmButton = document.querySelector('.btn-confirm-custom');
+            
+            let selectedValue = '';
+            
+            // Handle brand option selection (multi-select)
+            brandOptions.forEach(option => {
+                option.addEventListener('click', (event) => {
+                    const value = option.dataset.value;
+                    
+                    if (value === 'custom') {
+                        if (option.classList.contains('selected')) {
+                            // Currently editing - close edit mode
+                            option.classList.remove('selected');
+                            customInput.style.display = 'none';
+                            
+                            // If there's a value, keep it as has-value
+                            const existingValue = option.dataset.customValue || '';
+                            if (existingValue) {
+                                option.classList.add('has-value');
+                            } else {
+                                // No value, reset completely
+                                option.classList.remove('has-value');
+                                const brandText = option.querySelector('.brand-text');
+                                if (brandText) {
+                                    brandText.textContent = 'הקלד מותג אחר';
+                                }
+                            }
+                        } else if (option.classList.contains('has-value')) {
+                            // Click on main area: deselect completely
+                            option.classList.remove('has-value');
+                            option.dataset.customValue = '';
+                            const brandText = option.querySelector('.brand-text');
+                            if (brandText) {
+                                brandText.textContent = 'הקלד מותג אחר';
+                            }
+                            // Remove edit button
+                            const editBtn = option.querySelector('.custom-edit-btn');
+                            if (editBtn) {
+                                editBtn.remove();
+                            }
+                        } else {
+                            // Not selected, not has-value - start fresh
+                            option.classList.add('selected');
+                            customInput.style.display = 'block';
+                            
+                            if (customTextInput) {
+                                customTextInput.value = '';
+                                confirmButton.disabled = true;
+                                customTextInput.focus();
+                            }
+                            
+                            nextBtn.disabled = true;
+                        }
+                    } else if (value === '') {
+                        // Handle "no preference" - clears all others
+                        if (option.classList.contains('selected')) {
+                            // Deselect no preference
+                            option.classList.remove('selected');
+                        } else {
+                            // Select no preference and clear all others
+                            brandOptions.forEach(opt => {
+                                opt.classList.remove('selected');
+                                if (opt.classList.contains('custom-text-option')) {
+                                    opt.classList.remove('has-value');
+                                    opt.dataset.customValue = '';
+                                    const brandText = opt.querySelector('.brand-text');
+                                    if (brandText) {
+                                        brandText.textContent = 'הקלד מותג אחר';
+                                    }
+                                    // Remove edit button
+                                    const editBtn = opt.querySelector('.custom-edit-btn');
+                                    if (editBtn) {
+                                        editBtn.remove();
+                                    }
+                                }
+                            });
+                            option.classList.add('selected');
+                            customInput.style.display = 'none';
+                        }
+                    } else {
+                        // Handle regular brand selection (multi-select)
+                        if (option.classList.contains('selected')) {
+                            // Deselect this brand
+                            option.classList.remove('selected');
+                        } else {
+                            // Select this brand
+                            option.classList.add('selected');
+                            // Clear "no preference" if it was selected
+                            const noPreferenceOption = document.querySelector('.no-preference-option');
+                            if (noPreferenceOption && noPreferenceOption.classList.contains('selected')) {
+                                noPreferenceOption.classList.remove('selected');
+                            }
+                        }
+                        customInput.style.display = 'none';
+                    }
+                    
+                    // Update next button state
+                    this.updateBrandNextButton(nextBtn, question.required);
+                });
+            });
+            
+            // Handle custom text input
+            if (customTextInput && confirmButton) {
+                // Initialize confirm button as disabled
+                confirmButton.disabled = true;
+                
+                customTextInput.addEventListener('input', () => {
+                    const hasValue = customTextInput.value.trim().length > 0;
+                    confirmButton.disabled = !hasValue;
+                    
+                    // Also update next button state while typing
+                    if (hasValue) {
+                        const customOption = document.querySelector('.custom-text-option');
+                        if (customOption) {
+                            customOption.dataset.customValue = customTextInput.value.trim();
+                        }
+                        this.updateBrandNextButton(nextBtn, question.required);
+                    }
+                });
+                
+                customTextInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && customTextInput.value.trim()) {
+                        confirmButton.click();
+                    }
+                });
+            }
+            
+            // Handle confirm custom brand
+            if (confirmButton) {
+                confirmButton.addEventListener('click', () => {
+                    const value = customTextInput.value.trim();
+                    if (value) {
+                        customInput.style.display = 'none';
+                        
+                        const customTextOption = document.querySelector('.custom-text-option');
+                        const customBrandText = document.querySelector('.custom-text-option .brand-text');
+                        
+                        if (customTextOption && customBrandText) {
+                            // Store custom value
+                            customTextOption.dataset.customValue = value;
+                            
+                            // Update visual state
+                            customTextOption.classList.remove('selected');
+                            customTextOption.classList.add('has-value');
+                            
+                            // Update text to show the custom brand
+                            customBrandText.textContent = value;
+                            
+                            // Add edit button if not exists
+                            if (!customTextOption.querySelector('.custom-edit-btn')) {
+                                const editBtn = document.createElement('button');
+                                editBtn.className = 'custom-edit-btn';
+                                editBtn.innerHTML = '✏️';
+                                editBtn.title = 'עריכה';
+                                customTextOption.appendChild(editBtn);
+                                
+                                // Add edit button click handler
+                                editBtn.addEventListener('click', (e) => {
+                                    e.stopPropagation();
+                                    // Enter edit mode
+                                    customTextOption.classList.remove('has-value');
+                                    customTextOption.classList.add('selected');
+                                    customInput.style.display = 'block';
+                                    
+                                    const existingValue = customTextOption.dataset.customValue || '';
+                                    if (existingValue && customTextInput) {
+                                        customTextInput.value = existingValue;
+                                        confirmButton.disabled = false;
+                                    }
+                                    
+                                    if (customTextInput) {
+                                        customTextInput.focus();
+                                    }
+                                });
+                            }
+                        }
+                        
+                        this.updateBrandNextButton(nextBtn, question.required);
+                    }
+                });
+            }
         }
     }
+
+    updateBrandNextButton(nextBtn, required) {
+        const selectedBrands = document.querySelectorAll('.brand-option.selected');
+        const customOptionWithValue = document.querySelector('.custom-text-option.has-value');
+        const customOptionSelected = document.querySelector('.custom-text-option.selected');
+        
+        // Count total meaningful selections
+        let totalSelections = 0;
+        
+        // Count selected brands (excluding custom options being edited without value)
+        selectedBrands.forEach(option => {
+            if (!option.classList.contains('custom-text-option')) {
+                totalSelections++;
+            } else if (option.dataset.customValue) {
+                totalSelections++; // Custom option being edited with value
+            }
+        });
+        
+        // Count custom option with saved value (not being edited)
+        if (customOptionWithValue && !customOptionSelected) {
+            totalSelections++;
+        }
+        
+        // Enable next button if not required OR has meaningful selections
+        nextBtn.disabled = required && totalSelections === 0;
+    }
+
+    getBrandIcon(brand) {
+        const brandIcons = {
+            'אאודי': '🅰️',
+            'אופל': '⚪',
+            'איסוזו': '🔶',
+            'אינפיניטי': '♾️',
+            'אקורה': '🅰️',
+            'אלפא רומיאו': '🏁',
+            'BMW': '🅱️',
+            'ג\'יפ': '🏔️',
+            'דודג\'': '🐏',
+            'דייהטסו': '🔸',
+            'הונדה': '🅗',
+            'הונדאי': '🅷',
+            'וולוו': '⚡',
+            'טויוטה': '🔴',
+            'טסלה': '⚡',
+            'יגואר': '🐆',
+            'לנד רובר': '🏔️',
+            'לנצ\'יה': '🔹',
+            'לקסוס': '💎',
+            'מזדה': '🔶',
+            'מיני': '🔴',
+            'מיצובישי': '💎',
+            'מרצדס בנץ': '🌟',
+            'ניסן': '🔵',
+            'סוזוקי': '🔴',
+            'סובארו': '⭐',
+            'סיאט': '🔺',
+            'סיטרואן': '🔻',
+            'סקודה': '💎',
+            'פיאט': '🔸',
+            'פיג\'ו': '🦁',
+            'פולקסווגן': '🔧',
+            'פורד': '🅵',
+            'קיה': '🅺',
+            'קרייזלר': '⭐',
+            'רנו': '💠',
+            'שברולט': '⚡'
+        };
+        
+        return brandIcons[brand] || '🚗';
+    }
+
+
 
     setupRangeSliders(nextBtn) {
         const rangeMin = document.querySelector('.range-min');
@@ -707,6 +1118,40 @@ class CarFinderWizard {
         } else if (question.type === 'text' || question.type === 'number') {
             const input = document.querySelector('.text-input');
             return input ? input.value.trim() : null;
+        } else if (question.type === 'autocomplete') {
+            // Handle multiple brand selections (both selected and has-value)
+            const selectedBrands = document.querySelectorAll('.brand-option.selected');
+            const customWithValue = document.querySelector('.custom-text-option.has-value');
+            
+            const values = [];
+            
+            // Process selected brands
+            selectedBrands.forEach(option => {
+                const value = option.dataset.value;
+                if (value === 'custom') {
+                    // Get custom text value (only if currently being edited)
+                    const customValue = option.dataset.customValue;
+                    if (customValue) {
+                        values.push(customValue);
+                    }
+                } else if (value === '') {
+                    // No preference
+                    values.push('אין לי העדפה');
+                } else {
+                    // Regular brand
+                    values.push(value);
+                }
+            });
+            
+            // Add custom option with value (if not currently being edited)
+            if (customWithValue && !customWithValue.classList.contains('selected')) {
+                const customValue = customWithValue.dataset.customValue;
+                if (customValue) {
+                    values.push(customValue);
+                }
+            }
+            
+            return values.length > 0 ? values : null;
         }
         
         return null;

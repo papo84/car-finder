@@ -245,7 +245,7 @@ class CarFinderWizard {
                     'כן, 1',
                     'כן, לפחות 2'
                 ],
-                required: false
+                required: true
             },
             {
                 id: 'ownership_duration',
@@ -306,12 +306,6 @@ class CarFinderWizard {
                 }
             },
             {
-                id: 'brand_preference',
-                text: 'האם יש לך העדפה למותג מסוים?',
-                type: 'text',
-                required: false
-            },
-            {
                 id: 'financing',
                 text: 'האם אתה מתכוון לרכוש את הרכב במימון?',
                 type: 'multiple-choice',
@@ -320,6 +314,29 @@ class CarFinderWizard {
                     'כן, מימון חלקי',
                     'לא, תשלום מלא במזומן'
                 ],
+                required: true
+            },
+            {
+                id: 'popularity',
+                text: 'כמה חשוב לך שהרכב יהיה דגם נפוץ בארץ?',
+                type: 'multiple-choice',
+                options: [
+                    'חשוב מאוד',
+                    'לא קריטי',
+                    'אין לי העדפה'
+                ],
+                required: true
+            },
+            {
+                id: 'brand_preference',
+                text: 'האם יש לך העדפה למותג מסוים?',
+                type: 'text',
+                required: false
+            },
+            {
+                id: 'free_text',
+                text: 'יש עוד משהו שחשוב לך שנדע כדי למצוא את הרכב המתאים לך?',
+                type: 'text',
                 required: false
             }
         ];

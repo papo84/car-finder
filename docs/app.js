@@ -5,7 +5,16 @@ class CarFinderWizard {
         this.questions = [];
         this.container = document.getElementById('wizard-container');
         
-        this.showWelcomePage();
+        // Check for testing backdoor in URL first
+        const urlParams = new URLSearchParams(window.location.search);
+        const skipToQuestion = urlParams.get('q');
+        if (skipToQuestion) {
+            // If backdoor parameter exists, bypass welcome page
+            this.init();
+        } else {
+            // Normal flow: show welcome page
+            this.showWelcomePage();
+        }
     }
 
     showWelcomePage() {

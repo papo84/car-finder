@@ -220,7 +220,6 @@ exports.questions = [
         type: 'multiple-choice',
         options: [
             'חשוב מאוד',
-            'לא קריטי',
             'אין לי העדפה'
         ],
         required: true

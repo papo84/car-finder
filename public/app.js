@@ -11,6 +11,35 @@ class CarFinderWizard {
     async init() {
         try {
             await this.loadQuestions();
+            
+            // Check for testing backdoor in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const skipToQuestion = urlParams.get('q');
+            if (skipToQuestion) {
+                // Check if it's a number (for numeric backdoor)
+                const questionNumber = parseInt(skipToQuestion);
+                if (!isNaN(questionNumber)) {
+                    // Convert 1-based to 0-based index
+                    const questionIndex = questionNumber - 1;
+                    if (questionIndex >= 0 && questionIndex < this.questions.length) {
+                        this.currentStep = questionIndex;
+                        console.log(`🚪 Testing backdoor: Skipped to question ${questionNumber} (step ${questionIndex})`);
+                    } else {
+                        console.warn(`🚪 Testing backdoor: Question number ${questionNumber} is out of range (1-${this.questions.length}). Staying on home page.`);
+                        this.currentStep = 0;
+                    }
+                } else {
+                    // String-based backdoor (by question ID)
+                    const questionIndex = this.questions.findIndex(q => q.id === skipToQuestion);
+                    if (questionIndex >= 0) {
+                        this.currentStep = questionIndex;
+                        console.log(`🚪 Testing backdoor: Skipped to question "${skipToQuestion}" (step ${questionIndex})`);
+                    } else {
+                        console.warn(`🚪 Testing backdoor: Question "${skipToQuestion}" not found`);
+                    }
+                }
+            }
+            
             this.renderWizard();
             this.updateProgress();
         } catch (error) {
@@ -50,8 +79,8 @@ class CarFinderWizard {
             <div class="wizard-step active">
                 <div class="step-header">
                     <div class="step-number">${this.currentStep + 1}</div>
-                    <h2 class="step-title">Question ${this.currentStep + 1} of ${this.questions.length}</h2>
-                    <p class="step-description">Let's find your perfect car!</p>
+                    <h2 class="step-title">שאלה ${this.currentStep + 1} מתוך ${this.questions.length}</h2>
+                    <p class="step-description">בואו נמצא את הרכב המושלם עבורכם!</p>
                 </div>
                 
                 <div class="question">
@@ -61,16 +90,23 @@ class CarFinderWizard {
                 
                 <div class="navigation">
                     <button class="btn btn-secondary" id="prev-btn" ${this.currentStep === 0 ? 'disabled' : ''}>
-                        ← Previous
+                        → הקודם
                     </button>
                     <button class="btn btn-primary" id="next-btn" disabled>
-                        ${this.currentStep === this.questions.length - 1 ? 'Get Recommendation' : 'Next →'}
+                        ${this.currentStep === this.questions.length - 1 ? 'קבלת המלצה' : 'הבא ←'}
                     </button>
                 </div>
             </div>
         `;
 
         this.setupEventListeners();
+        
+        // Enable next button for non-required questions
+        const currentQuestion = this.questions[this.currentStep];
+        const nextBtn = document.getElementById('next-btn');
+        if (!currentQuestion.required && nextBtn) {
+            nextBtn.disabled = false;
+        }
     }
 
     shouldShowQuestion(stepIndex) {
@@ -117,19 +153,19 @@ class CarFinderWizard {
                                 
                                 <div class="range-display-main">
                                     <div class="range-values-display">
-                                        <span class="range-values">0 - 100,000 ${question.id === 'budget' ? '₪' : 'ק"מ'}</span>
+                                        <span class="range-values">0 - ${question.id === 'budget' ? '50,000' : '100,000'} ${question.id === 'budget' ? '₪' : 'ק"מ'}</span>
                                     </div>
                                 </div>
                                 
                                 <div class="dual-range-slider">
                                     <div class="slider-container">
-                                        <input type="range" class="slider slider-min" min="0" max="500000" value="0" step="1000">
-                                        <input type="range" class="slider slider-max" min="0" max="500000" value="100000" step="1000">
+                                        <input type="range" class="slider slider-min" min="0" max="300000" value="0" step="1000">
+                                        <input type="range" class="slider slider-max" min="0" max="300000" value="50000" step="1000">
                                         <div class="slider-track"></div>
                                         <div class="slider-range"></div>
                                         <div class="slider-labels">
                                             <span class="slider-label-min">0</span>
-                                            <span class="slider-label-max">500,000</span>
+                                            <span class="slider-label-max">300,000</span>
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +186,7 @@ class CarFinderWizard {
                                         <div class="range-input-box">
                                             <label class="input-label">מקסימום</label>
                                             <div class="input-with-unit">
-                                                <input type="number" class="range-max range-number-input" min="0" step="1000" placeholder="100000" />
+                                                <input type="number" class="range-max range-number-input" min="0" step="1000" placeholder="${question.id === 'budget' ? '50000' : '100000'}" />
                                                 <span class="input-unit">${question.id === 'budget' ? '₪' : 'ק"מ'}</span>
                                             </div>
                                         </div>
@@ -173,12 +209,12 @@ class CarFinderWizard {
                 `;
             case 'text':
                 return `
-                    <input type="text" class="text-input" placeholder="Enter your answer..." 
+                    <input type="text" class="text-input" placeholder="הכנס תשובה..." 
                            ${question.required ? 'required' : ''}>
                 `;
             case 'number':
                 return `
-                    <input type="number" class="text-input" placeholder="Enter a number..." 
+                    <input type="number" class="text-input" placeholder="הכנס טווח..." 
                            min="${question.min || 0}" max="${question.max || 999999}"
                            ${question.required ? 'required' : ''}>
                 `;
@@ -231,7 +267,8 @@ class CarFinderWizard {
             const checkboxes = document.querySelectorAll('.checkbox-input');
             const updateNextButton = () => {
                 const checkedBoxes = document.querySelectorAll('.checkbox-input:checked');
-                nextBtn.disabled = checkedBoxes.length === 0;
+                // Only disable if required and no boxes are checked
+                nextBtn.disabled = question.required && checkedBoxes.length === 0;
                 
                 // Update visual state of checkbox options
                 checkboxes.forEach(checkbox => {
@@ -250,7 +287,8 @@ class CarFinderWizard {
         } else if (question.type === 'text' || question.type === 'number') {
             const input = document.querySelector('.text-input');
             input.addEventListener('input', () => {
-                nextBtn.disabled = !input.value.trim();
+                // Only disable if required and input is empty
+                nextBtn.disabled = question.required && !input.value.trim();
             });
         }
     }
@@ -269,10 +307,16 @@ class CarFinderWizard {
         const unit = question.id === 'budget' ? '₪' : 'ק"מ';
         
         // Set appropriate max values based on question type
-        const maxValue = question.id === 'budget' ? 1000000 : 500000;
+        const maxValue = question.id === 'budget' ? 300000 : 500000;
+        const initialMaxValue = question.id === 'budget' ? 50000 : 100000;
+        
         sliderMin.max = maxValue;
         sliderMax.max = maxValue;
         rangeMax.max = maxValue;
+        
+        // Set initial values to spread the sliders apart
+        sliderMin.value = 0;
+        sliderMax.value = initialMaxValue;
 
         // Update slider labels
         const sliderLabelMax = document.querySelector('.slider-label-max');
@@ -319,7 +363,7 @@ class CarFinderWizard {
 
         const updateFromInput = () => {
             const minVal = parseInt(rangeMin.value) || 0;
-            const maxVal = parseInt(rangeMax.value) || 100000;
+            const maxVal = parseInt(rangeMax.value) || initialMaxValue;
             
             sliderMin.value = Math.min(minVal, maxVal);
             sliderMax.value = Math.max(minVal, maxVal);
@@ -448,7 +492,7 @@ class CarFinderWizard {
     showJsonResults() {
         // Create JSON object with questions and answers
         const questionsAndAnswers = {
-            summary: "Car Finder Survey Results",
+            summary: "תוצאות סקר מאתר הרכבים",
             timestamp: new Date().toISOString(),
             totalQuestions: this.questions.length,
             answeredQuestions: this.answers.length,
@@ -466,8 +510,8 @@ class CarFinderWizard {
             <div class="wizard-step active">
                 <div class="results">
                     <div class="results-header">
-                        <h2 class="results-title">📋 Survey Results</h2>
-                        <p class="results-subtitle">Your responses have been collected. Copy the JSON below to use with your preferred LLM for car recommendations.</p>
+                        <h2 class="results-title">📋 תוצאות הסקר</h2>
+                        <p class="results-subtitle">התשובות שלכם נאספו. העתיקו את נתוני ה-JSON למטה לשימוש עם מודל הבינה המלאכותית המועדף עליכם להמלצות רכב.</p>
                     </div>
                     
                     <div class="json-container">
@@ -479,10 +523,10 @@ class CarFinderWizard {
                     </div>
                     
                     <div class="instructions">
-                        <h4>Next Steps:</h4>
-                        <p>Copy this JSON data and paste it into your preferred LLM (ChatGPT, Claude, etc.) with a prompt like:</p>
+                        <h4>השלבים הבאים:</h4>
+                        <p>העתיקו את נתוני ה-JSON והדביקו אותם במודל הבינה המלאכותית המועדף עליכם (ChatGPT, Claude, וכו') עם הנחיה כמו:</p>
                         <div class="prompt-example">
-                            "Based on this car finder survey data, please recommend 3 suitable cars for this person and explain why each would be a good fit:"
+                            "בהתבסס על נתוני הסקר הזה למציאת רכב, אנא המליצו על 3 רכבים מתאימים לאדם הזה והסבירו מדוע כל אחד יהיה מתאים:"
                         </div>
                     </div>
                     

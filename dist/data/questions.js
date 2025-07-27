@@ -139,11 +139,11 @@ exports.questions = [
         text: 'האם אתה צריך מקום לכסאות בטיחות לילדים?',
         type: 'multiple-choice',
         options: [
-            'כן, לפחות 2',
+            'לא',
             'כן, 1',
-            'לא'
+            'כן, לפחות 2'
         ],
-        required: false
+        required: true
     },
     {
         id: 'ownership_duration',
@@ -192,22 +192,16 @@ exports.questions = [
         text: 'מספר בעלים קודמים מקסימלי שמקובל עליך?',
         type: 'multiple-choice',
         options: [
-            'בעלים ראשון בלבד',
-            'עד 2 בעלים',
-            'עד 3 בעלים',
-            'לא אכפת לי'
+            'יד ראשונה בלבד',
+            'עד יד שנייה',
+            'עד יד שלישית',
+            'לא משנה לי'
         ],
         required: true,
         conditional: {
             dependsOn: 'used_car',
             showWhen: ['כן, עדיף']
         }
-    },
-    {
-        id: 'brand_preference',
-        text: 'האם יש לך העדפה למותג מסוים?',
-        type: 'text',
-        required: false
     },
     {
         id: 'financing',
@@ -218,7 +212,7 @@ exports.questions = [
             'כן, מימון חלקי',
             'לא, תשלום מלא במזומן'
         ],
-        required: false
+        required: true
     },
     {
         id: 'popularity',
@@ -229,6 +223,12 @@ exports.questions = [
             'לא קריטי',
             'אין לי העדפה'
         ],
+        required: true
+    },
+    {
+        id: 'brand_preference',
+        text: 'האם יש לך העדפה למותג מסוים?',
+        type: 'text',
         required: false
     },
     {

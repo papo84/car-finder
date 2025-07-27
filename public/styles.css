@@ -93,11 +93,15 @@ body {
     font-weight: 600;
     color: #1f2937;
     margin-bottom: 0.5rem;
+    direction: rtl;
+    text-align: center;
 }
 
 .step-description {
     color: #6b7280;
     font-size: 1rem;
+    direction: rtl;
+    text-align: center;
 }
 
 /* Question Styles */
@@ -106,6 +110,7 @@ body {
 }
 
 .question-text {
+    direction: rtl;
     font-size: 1.2rem;
     font-weight: 500;
     color: #1f2937;
@@ -128,6 +133,7 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 500;
+    direction: rtl;
     color: #374151;
 }
 
@@ -220,6 +226,7 @@ body {
     font-size: 1rem;
     transition: border-color 0.3s ease;
     margin-bottom: 2rem;
+    direction: rtl;
 }
 
 .text-input:focus {
@@ -236,6 +243,7 @@ body {
     margin-top: 2rem;
     padding-top: 2rem;
     border-top: 1px solid #e5e7eb;
+    direction: rtl; /* RTL for navigation buttons */
 }
 
 .btn {
@@ -290,6 +298,7 @@ body {
     background: #e2e8f0;
     border-radius: 4px;
     overflow: hidden;
+    direction: rtl;
 }
 
 .progress-fill {
@@ -297,6 +306,7 @@ body {
     background: linear-gradient(90deg, #4f46e5, #7c3aed);
     transition: width 0.5s ease;
     border-radius: 4px;
+    direction: rtl;
 }
 
 /* Results Page */
@@ -530,17 +540,20 @@ body {
     border-radius: 12px;
     padding: 1.5rem;
     margin: 2rem 0;
+    direction: rtl;
 }
 
 .instructions h4 {
     color: #92400e;
     margin: 0 0 1rem 0;
     font-size: 1.1rem;
+    text-align: right;
 }
 
 .instructions p {
     color: #92400e;
     margin: 0 0 1rem 0;
+    text-align: right;
 }
 
 .prompt-example {
@@ -644,6 +657,7 @@ body {
 .dual-range-slider {
     margin: 2.5rem 0;
     padding: 0 1rem;
+    direction: rtl; /* Override RTL to make slider work left-to-right */
 }
 
 .slider-container {
@@ -726,6 +740,7 @@ body {
     border-radius: 4px;
     transition: all 0.2s ease;
     z-index: 1;
+    right:0%;
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
@@ -739,6 +754,7 @@ body {
     font-size: 0.8rem;
     color: #64748b;
     font-weight: 500;
+    direction: rtl; /* Ensure labels are positioned left-to-right */
 }
 
 /* Input Section */

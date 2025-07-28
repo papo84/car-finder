@@ -30,22 +30,38 @@ body {
 .header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    padding: 2rem 0;
+    padding: 1.2rem 0;
     text-align: center;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
     color: #4f46e5;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
 }
 
 .subtitle {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #6b7280;
     font-weight: 400;
+}
+
+/* Mobile optimizations for header */
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem 0;
+    }
+    
+    .logo {
+        font-size: 1.8rem;
+        margin-bottom: 0.2rem;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
 }
 
 /* Main Content */
@@ -320,27 +336,46 @@ body {
 /* Group Header */
 .group-header {
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    border-radius: 15px;
-    padding: 25px;
-    margin-bottom: 25px;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 20px;
     text-align: center;
     border: 2px solid #e3e8f0;
     direction: rtl;
 }
 
 .group-title {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: bold;
     color: #2c3e50;
-    margin: 0 0 10px 0;
+    margin: 0 0 8px 0;
     direction: rtl;
 }
 
 .group-description {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #5a6c7d;
-    margin: 0 0 20px 0;
+    margin: 0 0 15px 0;
     direction: rtl;
+}
+
+/* Mobile optimizations for group header */
+@media (max-width: 768px) {
+    .group-header {
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+    
+    .group-title {
+        font-size: 1.3rem;
+        margin: 0 0 6px 0;
+    }
+    
+    .group-description {
+        font-size: 0.9rem;
+        margin: 0 0 12px 0;
+    }
 }
 
 .group-progress {
@@ -1055,7 +1090,6 @@ body {
     border-radius: 4px;
     transition: all 0.2s ease;
     z-index: 1;
-    right:0%;
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 

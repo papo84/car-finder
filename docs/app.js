@@ -4,7 +4,7 @@ class CarFinderWizard {
         this.answers = [];
         this.questions = [];
         this.container = document.getElementById('wizard-container');
-        
+
         // Check for testing backdoor in URL first
         const urlParams = new URLSearchParams(window.location.search);
         const skipToQuestion = urlParams.get('q');
@@ -61,7 +61,7 @@ class CarFinderWizard {
                 </div>
             </div>
         `;
-        
+
         // Add event listener for start button
         const startBtn = document.getElementById('start-wizard-btn');
         if (startBtn) {
@@ -74,7 +74,7 @@ class CarFinderWizard {
     async init() {
         try {
             await this.loadQuestions();
-            
+
             // Check for testing backdoor in URL
             const urlParams = new URLSearchParams(window.location.search);
             const skipToQuestion = urlParams.get('q');
@@ -102,7 +102,7 @@ class CarFinderWizard {
                     }
                 }
             }
-            
+
             this.renderWizard();
             this.updateProgress();
         } catch (error) {
@@ -113,46 +113,76 @@ class CarFinderWizard {
     async loadQuestions() {
         // Question groups for better organization
         this.questionGroups = [
-            { 
-                id: 'usage_behavior', 
-                name: '🚗 שימוש והתנהגות נהיגה', 
-                description: 'נספר לנו על האופן שבו אתם משתמשים ברכב' 
+            {
+                id: 'budget_financing',
+                name: '💸 תקציב ומימון',
+                description: 'בואו נגדיר את המסגרת הכלכלית'
             },
-            { 
-                id: 'family_space', 
-                name: '👨‍👩‍👧 צרכים משפחתיים ומרחב', 
-                description: 'מה החללים והתכונות הנדרשים עבורכם' 
+            {
+                id: 'usage_behavior',
+                name: '🚗 שימוש והתנהגות נהיגה',
+                description: 'נספר לנו על האופן שבו אתם משתמשים ברכב'
             },
-            { 
-                id: 'budget_financing', 
-                name: '💸 תקציב ומימון', 
-                description: 'בואו נגדיר את המסגרת הכלכלית' 
+            {
+                id: 'family_space',
+                name: '👨‍👩‍👧 צרכים משפחתיים ומרחב',
+                description: 'מה החללים והתכונות הנדרשים עבורכם'
             },
-            { 
-                id: 'car_preferences', 
-                name: '🚘 העדפות רכב', 
-                description: 'איזה סוג רכב מתאים לכם' 
+            {
+                id: 'car_preferences',
+                name: '🚘 העדפות רכב',
+                description: 'איזה סוג רכב מתאים לכם'
             },
-            { 
-                id: 'maintenance_reliability', 
-                name: '🔧 תחזוקה ואמינות', 
-                description: 'תכנון לטווח הארוך' 
+            {
+                id: 'maintenance_reliability',
+                name: '🔧 תחזוקה ואמינות',
+                description: 'תכנון לטווח הארוך'
             },
-            { 
-                id: 'used_car', 
-                name: '🛻 רכב יד שנייה', 
-                description: 'אם אתם פתוחים לרכב משומש' 
+            {
+                id: 'used_car',
+                name: '🛻 רכב יד שנייה',
+                description: 'אם אתם פתוחים לרכב משומש'
             },
-            { 
-                id: 'additional_info', 
-                name: '🧠 מידע נוסף', 
-                description: 'פרטים נוספים שיעזרו לנו' 
+            {
+                id: 'additional_info',
+                name: '🧠 מידע נוסף',
+                description: 'פרטים נוספים שיעזרו לנו'
             }
         ];
 
         // Embedded questions for static version (GitHub Pages compatible) - Reorganized by groups
         this.questions = [
-            // Group 1: Usage and Driving Behavior (שימוש והתנהגות נהיגה)
+            // Group 1: Budget and Financing (תקציב ומימון) - MOVED TO FIRST
+            {
+                id: 'budget',
+                text: 'מה התקציב שלך לרכב (בש"ח)?',
+                type: 'multiple-choice',
+                options: [
+                    'עד 40,000 ₪',
+                    '40,000 - 70,000 ₪',
+                    '70,000 - 110,000 ₪',
+                    '110,000 - 160,000 ₪',
+                    '160,000 - 220,000 ₪',
+                    'מעל 220,000 ₪',
+                    'טווח מותאם אישית'
+                ],
+                required: true,
+                allowCustom: true,
+                group: 'budget_financing'
+            },
+            {
+                id: 'financing',
+                text: 'האם אתה מתכוון לרכוש את הרכב במימון?',
+                type: 'multiple-choice',
+                options: [
+                    'כן, מימון מלא',
+                    'כן, מימון חלקי',
+                    'לא, תשלום מלא במזומן'
+                ],
+                required: true,
+                group: 'budget_financing'
+            },
+            // Group 2: Usage and Driving Behavior (שימוש והתנהגות נהיגה)
             {
                 id: 'usage',
                 text: 'למה תשמש אותך המכונית?',
@@ -207,7 +237,7 @@ class CarFinderWizard {
                 required: true,
                 group: 'usage_behavior'
             },
-            // Group 2: Family Needs and Space (צרכים משפחתיים ומרחב)
+            // Group 3: Family Needs and Space (צרכים משפחתיים ומרחב)
             {
                 id: 'passengers',
                 text: 'כמה נוסעים בדרך כלל ברכב?',
@@ -263,36 +293,6 @@ class CarFinderWizard {
                 ],
                 required: true,
                 group: 'family_space'
-            },
-            // Group 3: Budget and Financing (תקציב ומימון)
-            {
-                id: 'budget',
-                text: 'מה התקציב שלך לרכב (בש"ח)?',
-                type: 'multiple-choice',
-                options: [
-                    'עד 40,000 ₪',
-                    '40,000 - 70,000 ₪',
-                    '70,000 - 110,000 ₪',
-                    '110,000 - 160,000 ₪',
-                    '160,000 - 220,000 ₪',
-                    'מעל 220,000 ₪',
-                    'טווח מותאם אישית'
-                ],
-                required: true,
-                allowCustom: true,
-                group: 'budget_financing'
-            },
-            {
-                id: 'financing',
-                text: 'האם אתה מתכוון לרכוש את הרכב במימון?',
-                type: 'multiple-choice',
-                options: [
-                    'כן, מימון מלא',
-                    'כן, מימון חלקי',
-                    'לא, תשלום מלא במזומן'
-                ],
-                required: true,
-                group: 'budget_financing'
             },
             // Group 4: Car Preferences (העדפות רכב)
             {
@@ -404,7 +404,7 @@ class CarFinderWizard {
                 type: 'autocomplete',
                 options: [
                     'אאודי',
-                    'אופל', 
+                    'אופל',
                     'איסוזו',
                     'אינפיניטי',
                     'אקורה',
@@ -473,7 +473,7 @@ class CarFinderWizard {
         const question = this.questions[this.currentStep];
         const currentGroup = this.getCurrentGroup();
         const progress = ((this.currentStep + 1) / this.questions.length) * 100;
-        
+
         // Calculate group progress
         const questionsInGroup = this.questions.filter(q => q.group === currentGroup.id);
         const currentQuestionInGroup = questionsInGroup.findIndex(q => q.id === question.id) + 1;
@@ -519,14 +519,14 @@ class CarFinderWizard {
         `;
 
         this.setupEventListeners();
-        
+
         // Enable next button for non-required questions
         const currentQuestion = this.questions[this.currentStep];
         const nextBtn = document.getElementById('next-btn');
         if (!currentQuestion.required && nextBtn) {
             nextBtn.disabled = false;
         }
-        
+
         // Special handling for brand preference to initialize properly
         if (currentQuestion.type === 'autocomplete' && !currentQuestion.required) {
             nextBtn.disabled = false;
@@ -535,14 +535,14 @@ class CarFinderWizard {
 
     shouldShowQuestion(stepIndex) {
         const question = this.questions[stepIndex];
-        
+
         // If no conditional logic, always show
         if (!question.conditional) {
             return true;
         }
 
         // Find the answer to the dependency question
-        const dependencyAnswer = this.answers.find(answer => 
+        const dependencyAnswer = this.answers.find(answer =>
             answer.questionId === question.conditional.dependsOn
         );
 
@@ -599,7 +599,7 @@ class CarFinderWizard {
                                         <div class="range-input-box">
                                             <label class="input-label">מינימום</label>
                                             <div class="input-with-unit">
-                                                <input type="number" class="range-min range-number-input" min="0" step="1000" placeholder="0" />
+                                                <input type="number" class="range-min range-number-input" min="0" placeholder="0" />
                                                 <span class="input-unit">${question.id === 'budget' ? '₪' : 'ק"מ'}</span>
                                             </div>
                                         </div>
@@ -610,7 +610,7 @@ class CarFinderWizard {
                                         <div class="range-input-box">
                                             <label class="input-label">מקסימום</label>
                                             <div class="input-with-unit">
-                                                <input type="number" class="range-max range-number-input" min="0" step="1000" placeholder="${question.id === 'budget' ? '50000' : '100000'}" />
+                                                <input type="number" class="range-max range-number-input" min="0" placeholder="${question.id === 'budget' ? '50000' : '100000'}" />
                                                 <span class="input-unit">${question.id === 'budget' ? '₪' : 'ק"מ'}</span>
                                             </div>
                                         </div>
@@ -687,12 +687,12 @@ class CarFinderWizard {
         if (question.type === 'multiple-choice') {
             const options = document.querySelectorAll('.option');
             const customInputContainer = document.querySelector('.custom-input-container');
-            
+
             options.forEach(option => {
                 option.addEventListener('click', () => {
                     options.forEach(opt => opt.classList.remove('selected'));
                     option.classList.add('selected');
-                    
+
                     // Handle custom range visibility
                     if (option.dataset.value === 'טווח מותאם אישית' && customInputContainer) {
                         customInputContainer.style.display = 'block';
@@ -709,7 +709,7 @@ class CarFinderWizard {
                     }
                 });
             });
-            
+
             // Handle custom range inputs
             this.setupRangeSliders(nextBtn);
         } else if (question.type === 'multiple-select') {
@@ -718,7 +718,7 @@ class CarFinderWizard {
                 const checkedBoxes = document.querySelectorAll('.checkbox-input:checked');
                 // Only disable if required and no boxes are checked
                 nextBtn.disabled = question.required && checkedBoxes.length === 0;
-                
+
                 // Update visual state of checkbox options
                 checkboxes.forEach(checkbox => {
                     const optionDiv = checkbox.closest('.checkbox-option');
@@ -729,7 +729,7 @@ class CarFinderWizard {
                     }
                 });
             };
-            
+
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', updateNextButton);
             });
@@ -744,20 +744,20 @@ class CarFinderWizard {
             const customInput = document.querySelector('.custom-brand-input');
             const customTextInput = document.querySelector('.custom-brand-text');
             const confirmButton = document.querySelector('.btn-confirm-custom');
-            
+
             let selectedValue = '';
-            
+
             // Handle brand option selection (multi-select)
             brandOptions.forEach(option => {
                 option.addEventListener('click', (event) => {
                     const value = option.dataset.value;
-                    
+
                     if (value === 'custom') {
                         if (option.classList.contains('selected')) {
                             // Currently editing - close edit mode
                             option.classList.remove('selected');
                             customInput.style.display = 'none';
-                            
+
                             // If there's a value, keep it as has-value
                             const existingValue = option.dataset.customValue || '';
                             if (existingValue) {
@@ -787,13 +787,13 @@ class CarFinderWizard {
                             // Not selected, not has-value - start fresh
                             option.classList.add('selected');
                             customInput.style.display = 'block';
-                            
+
                             if (customTextInput) {
                                 customTextInput.value = '';
                                 confirmButton.disabled = true;
                                 customTextInput.focus();
                             }
-                            
+
                             nextBtn.disabled = true;
                         }
                     } else if (value === '') {
@@ -838,21 +838,21 @@ class CarFinderWizard {
                         }
                         customInput.style.display = 'none';
                     }
-                    
+
                     // Update next button state
                     this.updateBrandNextButton(nextBtn, question.required);
                 });
             });
-            
+
             // Handle custom text input
             if (customTextInput && confirmButton) {
                 // Initialize confirm button as disabled
                 confirmButton.disabled = true;
-                
+
                 customTextInput.addEventListener('input', () => {
                     const hasValue = customTextInput.value.trim().length > 0;
                     confirmButton.disabled = !hasValue;
-                    
+
                     // Also update next button state while typing
                     if (hasValue) {
                         const customOption = document.querySelector('.custom-text-option');
@@ -862,35 +862,35 @@ class CarFinderWizard {
                         this.updateBrandNextButton(nextBtn, question.required);
                     }
                 });
-                
+
                 customTextInput.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' && customTextInput.value.trim()) {
                         confirmButton.click();
                     }
                 });
             }
-            
+
             // Handle confirm custom brand
             if (confirmButton) {
                 confirmButton.addEventListener('click', () => {
                     const value = customTextInput.value.trim();
                     if (value) {
                         customInput.style.display = 'none';
-                        
+
                         const customTextOption = document.querySelector('.custom-text-option');
                         const customBrandText = document.querySelector('.custom-text-option .brand-text');
-                        
+
                         if (customTextOption && customBrandText) {
                             // Store custom value
                             customTextOption.dataset.customValue = value;
-                            
+
                             // Update visual state
                             customTextOption.classList.remove('selected');
                             customTextOption.classList.add('has-value');
-                            
+
                             // Update text to show the custom brand
                             customBrandText.textContent = value;
-                            
+
                             // Add edit button if not exists
                             if (!customTextOption.querySelector('.custom-edit-btn')) {
                                 const editBtn = document.createElement('button');
@@ -898,7 +898,7 @@ class CarFinderWizard {
                                 editBtn.innerHTML = '✏️';
                                 editBtn.title = 'עריכה';
                                 customTextOption.appendChild(editBtn);
-                                
+
                                 // Add edit button click handler
                                 editBtn.addEventListener('click', (e) => {
                                     e.stopPropagation();
@@ -906,20 +906,20 @@ class CarFinderWizard {
                                     customTextOption.classList.remove('has-value');
                                     customTextOption.classList.add('selected');
                                     customInput.style.display = 'block';
-                                    
+
                                     const existingValue = customTextOption.dataset.customValue || '';
                                     if (existingValue && customTextInput) {
                                         customTextInput.value = existingValue;
                                         confirmButton.disabled = false;
                                     }
-                                    
+
                                     if (customTextInput) {
                                         customTextInput.focus();
                                     }
                                 });
                             }
                         }
-                        
+
                         this.updateBrandNextButton(nextBtn, question.required);
                     }
                 });
@@ -931,10 +931,10 @@ class CarFinderWizard {
         const selectedBrands = document.querySelectorAll('.brand-option.selected');
         const customOptionWithValue = document.querySelector('.custom-text-option.has-value');
         const customOptionSelected = document.querySelector('.custom-text-option.selected');
-        
+
         // Count total meaningful selections
         let totalSelections = 0;
-        
+
         // Count selected brands (excluding custom options being edited without value)
         selectedBrands.forEach(option => {
             if (!option.classList.contains('custom-text-option')) {
@@ -943,12 +943,12 @@ class CarFinderWizard {
                 totalSelections++; // Custom option being edited with value
             }
         });
-        
+
         // Count custom option with saved value (not being edited)
         if (customOptionWithValue && !customOptionSelected) {
             totalSelections++;
         }
-        
+
         // Enable next button if not required OR has meaningful selections
         nextBtn.disabled = required && totalSelections === 0;
     }
@@ -993,7 +993,7 @@ class CarFinderWizard {
             'רנו': '💠',
             'שברולט': '⚡'
         };
-        
+
         return brandIcons[brand] || '🚗';
     }
 
@@ -1011,15 +1011,15 @@ class CarFinderWizard {
 
         const question = this.questions[this.currentStep];
         const unit = question.id === 'budget' ? '₪' : 'ק"מ';
-        
+
         // Set appropriate max values based on question type
         const maxValue = question.id === 'budget' ? 300000 : 500000;
         const initialMaxValue = question.id === 'budget' ? 50000 : 100000;
-        
+
         sliderMin.max = maxValue;
         sliderMax.max = maxValue;
         rangeMax.max = maxValue;
-        
+
         // Set initial values to spread the sliders apart
         sliderMin.value = 0;
         sliderMax.value = initialMaxValue;
@@ -1050,10 +1050,17 @@ class CarFinderWizard {
             rangeMax.value = maxVal;
 
             // Update visual range
-            const percent1 = (minVal / maxValue) * 100;
-            const percent2 = (maxVal / maxValue) * 100;
-            sliderRange.style.left = percent1 + '%';
-            sliderRange.style.width = (percent2 - percent1) + '%';
+            const percent1 = (maxVal / maxValue) * 100;
+            const percent2 = (minVal / maxValue) * 100;
+
+            // Calculate right position: how much space is to the RIGHT of the right slider
+            const rightPercent = (1 - percent2 / 100) * 100;
+            // Calculate width: the difference between max and min positions
+            const widthPercent = percent1 - percent2
+
+            sliderRange.style.left = ''; // Clear left positioning
+            sliderRange.style.right = 100 - rightPercent + '%';
+            sliderRange.style.width = widthPercent + '%';
 
             // Update display
             if (rangeValues) {
@@ -1069,18 +1076,31 @@ class CarFinderWizard {
 
         const updateFromInput = () => {
             const minVal = parseInt(rangeMin.value) || 0;
-            const maxVal = parseInt(rangeMax.value) || initialMaxValue;
-            
+            const maxVal = rangeMax.value === '' ? 0 : parseInt(rangeMax.value) || 0;
+
+            // Temporarily remove step to allow any value
+            const originalMinStep = sliderMin.step;
+            const originalMaxStep = sliderMax.step;
+
+            sliderMin.step = "1";
+            sliderMax.step = "1";
+
+            // Set the values
             sliderMin.value = Math.min(minVal, maxVal);
             sliderMax.value = Math.max(minVal, maxVal);
+
             updateValues();
+
+            // Restore original step for smooth dragging
+            sliderMin.step = originalMinStep;
+            sliderMax.step = originalMaxStep;
         };
 
         // Event listeners
         sliderMin.addEventListener('input', updateValues);
         sliderMax.addEventListener('input', updateValues);
-        rangeMin.addEventListener('input', updateFromInput);
-        rangeMax.addEventListener('input', updateFromInput);
+        rangeMin.addEventListener('change', updateFromInput);
+        rangeMax.addEventListener('change', updateFromInput);
 
         // Initialize
         updateValues();
@@ -1088,11 +1108,11 @@ class CarFinderWizard {
 
     getCurrentAnswer() {
         const question = this.questions[this.currentStep];
-        
+
         if (question.type === 'multiple-choice') {
             const selectedOption = document.querySelector('.option.selected');
             if (!selectedOption) return null;
-            
+
             // Handle custom range
             if (selectedOption.dataset.value === 'טווח מותאם אישית') {
                 const rangeMin = document.querySelector('.range-min');
@@ -1106,7 +1126,7 @@ class CarFinderWizard {
                 }
                 return null;
             }
-            
+
             return selectedOption.dataset.value;
         } else if (question.type === 'multiple-select') {
             const checkedBoxes = document.querySelectorAll('.checkbox-input:checked');
@@ -1122,9 +1142,9 @@ class CarFinderWizard {
             // Handle multiple brand selections (both selected and has-value)
             const selectedBrands = document.querySelectorAll('.brand-option.selected');
             const customWithValue = document.querySelector('.custom-text-option.has-value');
-            
+
             const values = [];
-            
+
             // Process selected brands
             selectedBrands.forEach(option => {
                 const value = option.dataset.value;
@@ -1142,7 +1162,7 @@ class CarFinderWizard {
                     values.push(value);
                 }
             });
-            
+
             // Add custom option with value (if not currently being edited)
             if (customWithValue && !customWithValue.classList.contains('selected')) {
                 const customValue = customWithValue.dataset.customValue;
@@ -1150,16 +1170,16 @@ class CarFinderWizard {
                     values.push(customValue);
                 }
             }
-            
+
             return values.length > 0 ? values : null;
         }
-        
+
         return null;
     }
 
     nextStep() {
         const answer = this.getCurrentAnswer();
-        
+
         if (!answer && this.questions[this.currentStep].required) {
             this.showError('Please provide an answer to continue.');
             return;
@@ -1176,7 +1196,7 @@ class CarFinderWizard {
         }
 
         this.currentStep++;
-        
+
         if (this.currentStep >= this.questions.length) {
             this.showJsonResults();
         } else {
@@ -1191,9 +1211,9 @@ class CarFinderWizard {
             if (this.answers.length > 0) {
                 this.answers.pop();
             }
-            
+
             this.currentStep--;
-            
+
             // Skip conditional questions that shouldn't be shown when going back
             while (this.currentStep >= 0 && !this.shouldShowQuestion(this.currentStep)) {
                 this.currentStep--;
@@ -1202,7 +1222,7 @@ class CarFinderWizard {
                     this.answers.pop();
                 }
             }
-            
+
             this.renderWizard();
             this.updateProgress();
         }
@@ -1212,7 +1232,7 @@ class CarFinderWizard {
         // Count how many questions will actually be shown based on current answers
         let totalQuestionsToShow = 0;
         let questionsAnsweredSoFar = 0;
-        
+
         for (let i = 0; i < this.questions.length; i++) {
             if (this.shouldShowQuestion(i)) {
                 totalQuestionsToShow++;
@@ -1221,7 +1241,7 @@ class CarFinderWizard {
                 }
             }
         }
-        
+
         const progress = totalQuestionsToShow > 0 ? (questionsAnsweredSoFar / totalQuestionsToShow) * 100 : 0;
         const progressFill = document.querySelector('.progress-fill');
         if (progressFill) {
@@ -1441,7 +1461,7 @@ class CarFinderWizard {
         document.body.appendChild(textArea);
         textArea.focus();
         textArea.select();
-        
+
         try {
             document.execCommand('copy');
             const copyBtn = document.getElementById('copy-btn');
@@ -1455,7 +1475,7 @@ class CarFinderWizard {
         } catch (err) {
             console.error('Fallback copy failed:', err);
         }
-        
+
         document.body.removeChild(textArea);
     }
 
@@ -1475,7 +1495,7 @@ class CarFinderWizard {
         const jsonString = JSON.stringify(questionsAndAnswers, null, 2);
         const blob = new Blob([jsonString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
-        
+
         const a = document.createElement('a');
         a.href = url;
         a.download = 'car-finder-survey-results.json';
@@ -1511,11 +1531,11 @@ class CarFinderWizard {
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error';
         errorDiv.textContent = message;
-        
+
         const currentStep = document.querySelector('.wizard-step');
         if (currentStep) {
             currentStep.insertBefore(errorDiv, currentStep.firstChild);
-            
+
             setTimeout(() => {
                 errorDiv.remove();
             }, 5000);
@@ -1526,11 +1546,11 @@ class CarFinderWizard {
         const successDiv = document.createElement('div');
         successDiv.className = 'success';
         successDiv.textContent = message;
-        
+
         const currentStep = document.querySelector('.wizard-step');
         if (currentStep) {
             currentStep.insertBefore(successDiv, currentStep.firstChild);
-            
+
             setTimeout(() => {
                 successDiv.remove();
             }, 3000);
@@ -1551,7 +1571,7 @@ class CarFinderWizard {
         };
 
         const jsonString = JSON.stringify(questionsAndAnswers, null, 2);
-        
+
         return `בהתבסס על נתוני הסקר למציאת רכב, אנא תן לי 3 המלצות רכב מתאימות וסביר מדוע כל רכב מתאים לפי הנתונים שלהלן.
 
 אנא ספק עבור כל רכב:
@@ -1579,8 +1599,8 @@ ${jsonString}
         if (promptPreview) {
             const fullPrompt = this.generateFullPrompt();
             // Show truncated version for preview
-            const truncatedPrompt = fullPrompt.length > 300 
-                ? fullPrompt.substring(0, 300) + '...' 
+            const truncatedPrompt = fullPrompt.length > 300
+                ? fullPrompt.substring(0, 300) + '...'
                 : fullPrompt;
             promptPreview.textContent = truncatedPrompt;
         }
@@ -1588,7 +1608,7 @@ ${jsonString}
 
     async copyFullPromptToClipboard() {
         const fullPrompt = this.generateFullPrompt();
-        
+
         try {
             await navigator.clipboard.writeText(fullPrompt);
             const copyPromptBtn = document.getElementById('copy-prompt-btn');
@@ -1609,7 +1629,7 @@ ${jsonString}
     openChatGPT() {
         // Open ChatGPT in a new tab
         window.open('https://chat.openai.com/', '_blank');
-        
+
         // Show helpful message
         this.showSuccess('ChatGPT נפתח בחלון חדש. הדבק את הפרומפט שהעתקת!');
     }

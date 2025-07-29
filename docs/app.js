@@ -170,18 +170,6 @@ class CarFinderWizard {
                 allowCustom: true,
                 group: 'budget_financing'
             },
-            {
-                id: 'financing',
-                text: 'האם אתה מתכוון לרכוש את הרכב במימון?',
-                type: 'multiple-choice',
-                options: [
-                    'כן, מימון מלא',
-                    'כן, מימון חלקי',
-                    'לא, תשלום מלא במזומן'
-                ],
-                required: true,
-                group: 'budget_financing'
-            },
             // Group 2: Usage and Driving Behavior (שימוש והתנהגות נהיגה)
             {
                 id: 'usage',
@@ -199,32 +187,6 @@ class CarFinderWizard {
                 group: 'usage_behavior'
             },
             {
-                id: 'driving_style',
-                text: 'איך היית מתאר/ת את סגנון הנהיגה שלך?',
-                type: 'multiple-choice',
-                options: [
-                    'חסכוני וזהיר',
-                    'מאוזן',
-                    'ספורטיבי',
-                    'נוחות ויוקרה'
-                ],
-                required: true,
-                group: 'usage_behavior'
-            },
-            {
-                id: 'intercity',
-                text: 'כמה פעמים בשבוע אתה נוסע מחוץ לעיר?',
-                type: 'multiple-choice',
-                options: [
-                    'כמעט אף פעם',
-                    '1-2 פעמים בשבוע',
-                    '3-4 פעמים בשבוע',
-                    'כל יום'
-                ],
-                required: true,
-                group: 'usage_behavior'
-            },
-            {
                 id: 'mileage',
                 text: 'כמה קילומטרים אתה נוסע בממוצע ביום או בשבוע?',
                 type: 'multiple-choice',
@@ -234,23 +196,10 @@ class CarFinderWizard {
                     '50-100 ק"מ ליום',
                     'יותר מ-100 ק"מ ליום'
                 ],
-                required: true,
+                required: false,
                 group: 'usage_behavior'
             },
             // Group 3: Family Needs and Space (צרכים משפחתיים ומרחב)
-            {
-                id: 'passengers',
-                text: 'כמה נוסעים בדרך כלל ברכב?',
-                type: 'multiple-choice',
-                options: [
-                    '1-2 אנשים',
-                    '3-4 אנשים',
-                    '5-6 אנשים',
-                    '7+ אנשים'
-                ],
-                required: true,
-                group: 'family_space'
-            },
             {
                 id: 'kids_seats',
                 text: 'האם אתה צריך מקום לכסאות בטיחות לילדים?',
@@ -271,6 +220,7 @@ class CarFinderWizard {
                     'בטיחות',
                     'טכנולוגיה/מולטימדיה',
                     'חיסכון בדלק',
+                    'זול לאחזקה',
                     'ביצועים',
                     'נוחות',
                     'תא מטען גדול',
@@ -282,14 +232,12 @@ class CarFinderWizard {
             },
             {
                 id: 'parking',
-                text: 'מה מצב החניה שלך?',
+                text: 'איפה אתה נוהג לרוב ואיך זה משפיע על גודל הרכב שאתה מחפש?',
                 type: 'multiple-choice',
                 options: [
-                    'חניה ברחוב',
-                    'חניה פרטית קטנה',
-                    'חניה פרטית גדולה',
-                    'חניה בבניין/חניון',
-                    'אין חניה קבועה'
+                    'בעיר – מעדיף רכב קטן וזריז',
+                    'בנסיעות ארוכות – חשוב לי מרחב ונוחות',
+                    'צריך מקום לציוד/משפחה – רכב מרווח עדיף לי'
                 ],
                 required: true,
                 group: 'family_space'
@@ -321,19 +269,6 @@ class CarFinderWizard {
                 group: 'car_preferences'
             },
             // Group 5: Maintenance and Reliability (תחזוקה ואמינות)
-            {
-                id: 'maintenance',
-                text: 'כמה חשוב לך שהרכב יהיה זול לאחזקה?',
-                type: 'multiple-choice',
-                options: [
-                    'חשוב מאוד',
-                    'די חשוב',
-                    'פחות חשוב',
-                    'לא חשוב בכלל'
-                ],
-                required: true,
-                group: 'maintenance_reliability'
-            },
             {
                 id: 'ownership_duration',
                 text: 'לכמה זמן אתה מתכנן להחזיק את הרכב?',
